@@ -1,77 +1,69 @@
-// Etape 1.1 : Récupération des travaux depuis le back-end
+// Etape 1.1 Récupérer les travaux depuis le back-end
+async function fetchData() {
+    const response = await fetch('http://localhost:5678/api/works');
+    return await response.json();
+}
 
-const gallery = document.querySelector('.gallery');
 // Création fonction pour reset de la section gallery
+const gallery = document.querySelector('.gallery');
 function resetGallery (){
     gallery.innerHTML = ""
 }
 
-resetGallery ();
+//Etape 1.2 gestion du filtre des "works"
+//Récupération des boutons de filtrage
+const allButton = document.querySelector('.noFilter');
+const objectButton = document.querySelector('.filter-objet');
+const appartementButton = document.querySelector('.filter-appartement')
+const hotelsButton = document.querySelector('.filter-hotel');
 
-// Appel à l'API pour récuperer les travaux
-const reponse = await fetch('http://localhost:5678/api/works');
-const projets = await reponse.json();
+//Définition des évènements liés aux boutons
+allButton.addEventListener('click' , () => {
+    updateFilters("all");
+})
+
+objectButton.addEventListener('click' , () => {
+    updateFilters(1);
+})
+
+appartementButton.addEventListener('click' , () => {
+    updateFilters(2);
+})
+
+hotelsButton.addEventListener('click' , () => {
+    updateFilters(3);
+})
 
 
-function genererProjets (projets) {
-    for(let i = 0; i < projets.length; i++){
-        const works = projets [i];
-        // Création de la section <figure>
-        const figure = document.createElement('figure');
-        //Création des balises <img> et <figcaption>
-        const imageWorks = document.createElement('img');
-        imageWorks.src = works.imageUrl;
-        const figCaption = document.createElement('figcaption');
-        figCaption.innerText = works.title;
+// Création fonction pour filtrage des projets en fonction des catégories
+function updateFilters(category) {
+    fetchData().then(data => {
+        // Vidage de l'affichage des projets
+        resetGallery();
 
-        // Rattachement des balises à leur section
-        gallery.appendChild(figure);
-        figure.appendChild(imageWorks);
-        figure.appendChild(figCaption);
-    }
+        //Découpage du tableau "data" en "work" individuels
+        //Affichage de l'ensemble des "work" si bouton all, sinon affichage de la categoryID qui correspond au bouton
+        data.forEach(work => {
+            if(category === 'all' || work.categoryId === category) {
+                const figure = document.createElement('figure');
+                //Création des balises <img> et <figcaption>
+
+                const imageWork = document.createElement('img');
+                imageWork.src = work.imageUrl;
+                imageWork.alt = work.title
+                const figCaption = document.createElement('figcaption');
+                figCaption.innerText = work.title;
+
+                // Affichage des "work" séléctionné en les rattachant à la balise <div> du HTML
+                gallery.appendChild(figure);
+                figure.appendChild(imageWork);
+                figure.appendChild(figCaption);
+            }
+        });
+    }).catch(error => {
+        console.error('Error fetching data:', error);
+    });
 }
 
-genererProjets(projets);
-
-//Gestion des boutons pour filtre des projets
-
-const btnNoFilter = document.querySelector('.noFilter');
-const filterObject = document.querySelector('.filter-objet');
-const filterAppartement = document.querySelector('.filter-appartement')
-const filterHotel = document.querySelector('.filter-hotel');
-
-//Gestion du bouton TOUS
-btnNoFilter.addEventListener('click', function(){
-    const allWorks = projets.filter(function(work){
-        return work.categoryId 
-    });
-    resetGallery()
-    genererProjets(allWorks)
-})
-
-//Gestion du bouton Objets
-filterObject.addEventListener('click', function(){
-    const worksObject = projets.filter(function(work){
-        return work.categoryId === 1 
-    });
-    resetGallery()
-    genererProjets(worksObject)
-})
-
-//Gestion du bouton Appartements
-filterAppartement.addEventListener('click', function(){
-    const worksAppartement = projets.filter(function(work){
-        return work.categoryId === 2
-    });
-    resetGallery()
-    genererProjets(worksAppartement)
-})
-
-//Gestion du bouton Hôtels et restaurants
-filterHotel.addEventListener('click', function(){
-    const worksHotel = projets.filter(function(work){
-        return work.categoryId === 3
-    });
-    resetGallery()
-    genererProjets(worksHotel)
-})
+// Appel initial pour afficher tous les travaux
+updateFilters('all');

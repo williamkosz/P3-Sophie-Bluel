@@ -212,3 +212,74 @@ footer nav ul {
 	color: white;
 	background-color: #1D6154;
 }
+
+/*************  Page Login *************/
+
+
+.logInTitle {
+	display: flex;
+	justify-content: center;
+	margin-top: 150px;
+	
+}
+
+.formLogin {
+    width: 50%;
+    margin: 2em auto; 
+}
+
+.formLogin > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formLogin input {
+    height: 51px;
+    font-size: 1.2em;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    width: 100%; 
+    max-width: 379px; 
+	margin-bottom: 1em;
+}
+
+.formLogin label {
+    margin: 1em 0 0.5em 0; 
+    text-align: left;
+    width: 100%; 
+    max-width: 379px; 
+}
+
+.submitButton {
+	font-family: 'Syne';
+	font-size: 14px;
+	font-weight: 700;
+	color: white;
+	background-color: white;
+	margin : 2em auto ;
+	width: 181px;
+	text-align: center;
+	border-radius: 60px ;
+	padding: 10px 38px 9px 39px ;
+	cursor: pointer;
+	color: #1d6154;
+	border: 1px solid #1d6154;
+}
+
+.submitButton:hover{
+	color: white;
+	background-color: #1D6154;
+}
+
+.formLogin a {
+	font-size: 14px;
+	margin-top: 20px;
+	color: black;
+	text-align: center;
+}
+
+.loginFooter li {
+	font-size: 14px;
+	margin-top: 11em;
+}
