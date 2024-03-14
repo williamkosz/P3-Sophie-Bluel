@@ -1,3 +1,5 @@
+import {editorMode} from "./editor.js";
+
 // Etape 1.1 Récupérer les travaux depuis le back-end
 async function fetchData() {
     const response = await fetch('http://localhost:5678/api/works');
@@ -37,7 +39,8 @@ hotelsButton.addEventListener('click' , () => {
 
 // Création fonction pour filtrage des projets en fonction des catégories
 function updateFilters(category) {
-    fetchData().then(data => {
+    fetchData()
+    .then(data => {
         // Vidage de l'affichage des projets
         resetGallery();
 
@@ -67,3 +70,14 @@ function updateFilters(category) {
 
 // Appel initial pour afficher tous les travaux
 updateFilters('all');
+
+
+// Appel fonction importée pour mode editeur
+editorMode()
+
+
+
+
+//Ajout de la modale
+
+//Création de la modale

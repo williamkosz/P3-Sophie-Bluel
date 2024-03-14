@@ -10,15 +10,20 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script type="module" src="script/script.js"></script>
+	<script src="https://kit.fontawesome.com/d3f6a1c8dd.js" crossorigin="anonymous"></script>
 </head>
 <body>
+	<div class="loggedUserHeadBar">
+		<i class="fa-solid fa-pen-to-square"></i>
+		Mode édition
+	</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
 			<li><a href="index.html#portfolio">projets</a></li>
             <li><a href="index.html#contact">contact</a></li>
-            <li><a href="login.html" id="login">login</a></li>
+            <li><a href="login.html" id="logLink">login</a></li>
             <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -35,18 +40,84 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
+
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<!------- Intégration bouton ouverture modale -------->
+		<div class="projets">
+			<h2>Mes Projets</h2>
+			<button class="btnOpen hidden">
+				<i class="fa-regular fa-pen-to-square"></i>
+				modifier
+			</button>
+		</div>
+
+		<!------- Ensemble boutons filtre -------->	
 		<div class = "filter-container">
 			<button class="noFilter">Tous</button>
 			<button class="filter-objet">Objets</button>
 			<button class="filter-appartement">appartements</button>
 			<button class="filter-hotel">Hotels & restaurants</button>
 		</div>
-		<div class="gallery">
-			<!------- Suppresion de l'intégralité des projets car intégré en JS -------->
+
+		<!------- Gestion de la modale -------->
+		<div class="modal-container hidden">
+			<button class="btnClose"><i class="fa-solid fa-xmark"></i></button>
+			<h3>Galerie photo</h3>
+			<div class="modalGallery">
+				<!------- Géré en JS dynamiquement -------->
+			</div>
+			<div class="btnAddModaleContainer">
+				<button class="btnAddmodale">Valider</button>
+			</div>
+		</div>
+
+		<div class="addContentModal hidden">
+			<div class="exitModal">
+				<span class="arrowReturn"><i class="fa-solid fa-arrow-left"></i></span>
+				<button class="btnClose2"><i class="fa-solid fa-xmark"></i></button>
+			</div>
+			<h3>Ajout photo</h3>
+			<form id="formAddPic" method="post">
+				<div class="addPicContainer">
+					<i class="fa-regular fa-image"></i>
+					<label for="fileInput">+ Ajouter photo</label>
+					<input type="file"  id="fileInput" accept=".png, .jpeg, .jpg">
+					<p>jpg, png : 4mo max</p>
+				</div>
+
+				<div class="formLabel">
+					<label for="title">Titre</label>
+					<input type="text" name="name" id="title">
+				</div>
+
+				<div class="formLabel">
+					<label for="category">Catégorie</label>
+					<select name="name" id="category">
+						<option value=""></option>
+						<option value="Objets">Objets</option>
+						<option value="Appartements">Appartements</option>
+						<option value="Hôtels & restaurants">Hôtels & restaurants</option>
+					</select>
+				</div>
+				
+				<div class="btnValidateContainer">
+					<button class="btnValidatePic">Valider</button>
+				</div>
+
+			</form>
+		</div>
+
+			<div class="overlay"></div><!----RAJOUTER CLASS HIDDEN UNE FOIS CSS OK-->
+
+		</div>
+
+		<!------- Suppresion de l'intégralité des projets car intégré en JS -------->
+		<div class="gallery">	
+			<!---- géré en JS dynamiquement ----->
 		</div>
 	</section>
+
+	<!---- section contact ----->
 	<section id="contact">
 		<h2>Contact</h2>
 		<p>Vous avez un projet ? Discutons-en !</p>
