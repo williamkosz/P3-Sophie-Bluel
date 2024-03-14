@@ -361,6 +361,7 @@ footer nav ul {
 	font-size: 125%;
 	border: none;
 	background-color: white;
+	cursor: pointer;
 }
 
 .modal-container h3 {
@@ -394,6 +395,7 @@ footer nav ul {
 	font-style: normal;
 	border: none;	
 	margin-top: 30px;
+	cursor: pointer;
 }
 
 /********************** Deuxième modale choix de la photo à ajouter *********************/
@@ -419,12 +421,14 @@ footer nav ul {
 
 .arrowReturn {
 	font-size:125%;
+	cursor: pointer;
 }
 
 .btnClose2 {
 	font-size: 125%;
 	border: none;
 	background-color: white;
+	cursor: pointer;
 }
 
 .addContentModal h3 {
@@ -531,6 +535,7 @@ footer nav ul {
 	font-style: normal;
 	border: none;	
 	margin-top: 30px;
+	cursor: pointer;
 }
 
 
