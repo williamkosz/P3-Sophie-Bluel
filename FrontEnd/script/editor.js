@@ -77,10 +77,11 @@ export function generateWork() {
         //Découpage du tableau "data" en "work" individuels
         //Affichage de l'ensemble des "work" si bouton all, sinon affichage de la categoryID qui correspond au bouton
         data.forEach(work => {
+            const worksId = work.id
                 const modalGallery = document.querySelector('.modalGallery')
                 const figure = document.createElement('figure');
+                figure.classList.add(`figure-${worksId}`);
                 //Création des balises <img> et <figcaption>
-
                 const imageWork = document.createElement('img');
                 imageWork.src = work.imageUrl;
                 imageWork.alt = work.title
@@ -91,10 +92,17 @@ export function generateWork() {
                 // Affichage des "work" séléctionné en les rattachant à la balise <div> du HTML
                 modalGallery.appendChild(figure);
                 figure.appendChild(imageWork);
-                figure.appendChild(trashIcon);
-            }
-       )});
-    };
+                figure.appendChild(trashIcon); 
+
+                trashIcon.addEventListener('click', (event) => {
+                    deleteWorks(event, worksId)
+                });
+            });
+        });
+    }
+                
+              
+
 
 
 //Fonction ouverture modale 2 sur click 'Ajouter une photo'
@@ -121,3 +129,51 @@ export const returnModal1 = function () {
     modalContainer.classList.remove('hidden')
     modalContainer.setAttribute('display', 'flex')
 }
+
+
+//Fonction suppression travaux
+async function deleteWorks(event, worksId) {
+   let monToken = window.localStorage.getItem('token');
+    const deleteConfirmation = await Swal.fire({
+      title: "Êtes-vous sûr(e) de vouloir supprimer cette image ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Oui",
+      cancelButtonText: "Non",
+    });
+    // Si confirmation :
+    if (deleteConfirmation.isConfirmed) {
+      try {
+        const deleteFetch = await fetch(`http://localhost:5678/api/works/${worksId}`,
+          {
+            method: "DELETE",
+            headers: {Authorization: `Bearer ${monToken}`,
+            },
+          }
+        );
+        // Si suppresion ok
+        if (deleteFetch.ok) {
+          document.querySelectorAll(`.figure-${worksId}`)
+          .forEach((figure) => figure.remove());
+          event.preventDefault();
+          console.log("Travail supprimé");
+        } else {
+          console.error(
+            "Erreur lors de la suppression."
+          );
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Suppression impossible",
+          text: "Une erreur s'est produite",
+        });
+      }
+  }
+}
+
+
+
+
+
+                

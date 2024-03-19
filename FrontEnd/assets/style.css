@@ -399,7 +399,7 @@ footer nav ul {
 	right: 6px;
 	background-color: #000;
 	color: white;
-
+	cursor: pointer;
 }
 
 .trash-icon i {
@@ -409,7 +409,7 @@ footer nav ul {
 .btnAddModaleContainer {
 	display: flex;
 	border-top: solid 1px #B3B3B3;
-	margin-top: 50px;
+	margin-top: 80px;
 	margin-left: 15%;
 	width: 420px;
 	justify-content: center;
@@ -424,7 +424,7 @@ footer nav ul {
 	font-family: "Syne";
 	font-style: normal;
 	border: none;	
-	margin-top: 50px;
+	margin-top: 40px;
 	cursor: pointer;
 }
 
@@ -545,7 +545,7 @@ footer nav ul {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-.btnValidateContainer {
+.ValidateContainer {
 	display: flex;
 	border-top: solid 1px #B3B3B3;
 	margin-top: 50px;
@@ -563,7 +563,7 @@ footer nav ul {
 	font-family: "Syne";
 	font-style: normal;
 	border: none;	
-	margin-top: 30px;
+	margin-top: 40px;
 	cursor: pointer;
 }
 

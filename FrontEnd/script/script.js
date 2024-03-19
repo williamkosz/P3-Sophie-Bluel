@@ -54,8 +54,10 @@ function updateFilters(category) {
         //Découpage du tableau "data" en "work" individuels
         //Affichage de l'ensemble des "work" si bouton all, sinon affichage de la categoryID qui correspond au bouton
         data.forEach(work => {
+            const worksId = work.id;
             if(category === 'all' || work.categoryId === category) {
                 const figure = document.createElement('figure');
+                figure.classList.add(`figure-${worksId}`);
                 //Création des balises <img> et <figcaption>
 
                 const imageWork = document.createElement('img');
@@ -109,3 +111,6 @@ overlay.addEventListener('click', closeModal2);
 
 //Gestion des évènements pour retour modale 1
 arrowReturn.addEventListener('click', returnModal1)
+
+
+
