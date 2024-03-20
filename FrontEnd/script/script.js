@@ -6,6 +6,9 @@ import {closeModal} from "./editor.js";
 import {openModal2} from "./editor.js";
 import {closeModal2} from "./editor.js";
 import {returnModal1} from "./editor.js";
+import {choosePhoto} from "./editor.js";
+import {postNewFile} from "./editor.js";
+
 
 // Etape 1.1 Récupérer les travaux depuis le back-end
 export async function fetchData() {
@@ -59,7 +62,6 @@ function updateFilters(category) {
                 const figure = document.createElement('figure');
                 figure.classList.add(`figure-${worksId}`);
                 //Création des balises <img> et <figcaption>
-
                 const imageWork = document.createElement('img');
                 imageWork.src = work.imageUrl;
                 imageWork.alt = work.title
@@ -113,4 +115,36 @@ overlay.addEventListener('click', closeModal2);
 arrowReturn.addEventListener('click', returnModal1)
 
 
+//Création dela fonction pour fonctionnement du bouton de validation d'ajout de photo
+const disabledValidateBtn = function () {
+    const photoForm = document.getElementById('fileInput');
+    const titleForm = document.getElementById('title');
+    const categoryForm = document.getElementById('category');
+    const validateBtn = document.querySelector('.btnValidatePic');
+  
+    // Vérification des champs, s'ils sont vides ou non
+    if (photoForm.value.trim() === "" || titleForm.value.trim() === "" || categoryForm.value.trim() === "") {
+      validateBtn.disabled = true 
+      validateBtn.style.background = "#A7A7A7";
+      validateBtn.style.cursor = "default"
+    } else {
+      validateBtn.disabled = false; 
+      validateBtn.style.background = "#1D6154";
+      validateBtn.style.cursor = "pointer"
+    }
+  };
+  
+  // Ajout des écouteurs d'événements pour chaque champ de formulaire
+  document.getElementById('fileInput').addEventListener('change', disabledValidateBtn);
+  document.getElementById('title').addEventListener('change', disabledValidateBtn);
+  document.getElementById('category').addEventListener('change', disabledValidateBtn);
+  
+  // Appel initial pour vérifier l'état des champs du formulaire lors du chargement de la page
+  disabledValidateBtn();
+
+  //Import du nouveau fichier avant de le poster
+  choosePhoto();
+
+  //Post du nouveau fichier
+  postNewFile();
 

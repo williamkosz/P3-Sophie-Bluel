@@ -9,9 +9,9 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
-	<script type="module" src="script/script.js"></script>
 	<script src="https://kit.fontawesome.com/d3f6a1c8dd.js" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script type="module" src="script/script.js"></script>
 </head>
 <body>
 	<div class="loggedUserHeadBar">
@@ -80,9 +80,10 @@
 			<h3>Ajout photo</h3>
 			<form id="formAddPic" method="post">
 				<div class="addPicContainer">
+					<img src="" class="imagePreview" alt="Uploaded Image">
 					<i class="fa-regular fa-image"></i>
-					<label for="fileInput">+ Ajouter photo</label>
-					<input type="file"  id="fileInput" accept=".png, .jpeg, .jpg">
+					<label for="fileInput" class="labelFileInput">+ Ajouter photo</label>
+					<input type="file"  id="fileInput" accept=".png, .jpg">
 					<p>jpg, png : 4mo max</p>
 				</div>
 
@@ -95,9 +96,9 @@
 					<label for="category">Catégorie</label>
 					<select name="name" id="category">
 						<option value=""></option>
-						<option value="Objets">Objets</option>
-						<option value="Appartements">Appartements</option>
-						<option value="Hôtels & restaurants">Hôtels & restaurants</option>
+						<option value="Objets" id ="1">Objets</option>
+						<option value="Appartements" id ="2">Appartements</option>
+						<option value="Hôtels & restaurants" id ="3">Hôtels & restaurants</option>
 					</select>
 				</div>
 				

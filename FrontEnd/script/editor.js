@@ -88,7 +88,6 @@ export function generateWork() {
                 const trashIcon = document.createElement("div")
                 trashIcon.classList.add("trash-icon")
                 trashIcon.innerHTML= `<i class="fa-solid fa-trash-can" id="${work.id}"></i>`
-
                 // Affichage des "work" séléctionné en les rattachant à la balise <div> du HTML
                 modalGallery.appendChild(figure);
                 figure.appendChild(imageWork);
@@ -113,6 +112,7 @@ export const openModal2 = function () {
     modalContainer.classList.add('hidden')
     addContentModal.classList.remove('hidden')
     addContentModal.classList.add('display','flex')
+    resetModal2();
 } 
 
 //Fonction fermeture modale 2
@@ -120,14 +120,14 @@ export const closeModal2 = function () {
     overlay.classList.add('hidden')
     addContentModal.classList.add('hidden')
     addContentModal.removeAttribute('display', 'flex')
+    resetModal2();
 }
 
 //Fonction retour sur la modale 1
 export const returnModal1 = function () {
-    addContentModal.classList.add('hidden')
-    addContentModal.removeAttribute('display', 'flex')
-    modalContainer.classList.remove('hidden')
-    modalContainer.setAttribute('display', 'flex')
+    resetModal2();
+    closeModal2();
+    openModal();
 }
 
 
@@ -174,6 +174,188 @@ async function deleteWorks(event, worksId) {
 
 
 
+//Ajout de photo par la modale 
+export function choosePhoto () {
+    document.getElementById('fileInput').addEventListener('change', () => {
+      let file = fileInput.files[0];
 
+      //Vérfication si fichier sélectionné est conforme
+      let maxSize = 4 * 1024 * 1024;
+      let allowedFormats = ['image/jpg','image/jpeg','image/png'];
+      if(file.size <= maxSize && allowedFormats.includes(file.type)) {
+        //Création du FileReader pour lire le nouveau ficher
+        const fileReader = new FileReader();
+        //Lecture et traitement du nouveau fichier
+        fileReader.onload = () => { 
+          const imagePreview = document.querySelector('.imagePreview')
+          const iconAddPic = document.querySelector('.fa-image')
+          const labelInputFile = document.querySelector('.labelFileInput')
+          const textInputFile = document.querySelector('.addPicContainer p')
+          //Affichage du nouveau fichier
+          iconAddPic.style.display = 'none';
+          labelInputFile.style.display = 'none';
+          textInputFile.style.display = 'none';
+          
+          imagePreview.src = fileReader.result
+          imagePreview.style.display = 'flex';
+        }
+        fileReader.readAsDataURL(file)
+
+        //Message d'erreur si le taille de la photo ne correspond pas 
+      } else if (file.size > maxSize){
+        Swal.fire({
+          icon: "warning",
+          title: "Une erreur est survenue",
+          text: "L'image est trop volumineuse !",
+          confirmButtonText: "Ok",
+        })
+
+        //Message d'erreur si le format de la photo ne correspond pas
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Une erreur est survenue",
+          text: "Le format doit être de type JPG ou PNG !",
+          confirmButtonText: "Ok",
+        })
+      }
+  });
+}
+
+
+
+export function postNewFile () {
+        const btnValidatePic = document.querySelector('.btnValidatePic')
+        const fileInput = document.getElementById('fileInput')
+        const titleInput = document.getElementById('title')
+        const categoryInput = document.getElementById('category');
+        let monToken = window.localStorage.getItem('token');
+
+        //Ajout événement au click du bouton valider
+        btnValidatePic.addEventListener('click', async (event) => {
+          event.preventDefault();
+          if (fileInput.value === "" || titleInput.value.trim() === "" || categoryInput.value === "") {
+            Swal.fire({
+              icon: "warning",
+              title: "Erreur",
+              text: "Il s'emblerait qu'il manque des informations",
+            });
+          } else { 
+            const postConfirmation = await Swal.fire ({
+            icon: "info",
+            title: "Souhaitez-vous ajouter ce nouveau projet ?",
+            showCancelButton: true,
+            confirmButtonText: "Oui",
+            cancelButtonText: "Non",
+          });
+          //Si le bouton "oui" est cliqué :
+          if(postConfirmation.isConfirmed) {
+            const formData = new FormData ();
+              //Récupération de l'ID catégory
+              const categoryId = categoryInput.options[categoryInput.selectedIndex].id;
+              formData.append('category', categoryId);
+              formData.append('image', fileInput.files[0]);
+              formData.append('title', titleInput.value);
+            const response = await fetch("http://localhost:5678/api/works", {
+              method: "POST",
+              headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${monToken}`,
+                },
+              body: formData,
+              }); 
+              if (response.ok) {
+                Swal.fire ({
+                  icon: "success",
+                  title: "Nouveau projet ajouté !",
+                });
+                console.log(titleInput.value, " ajouté !")
+                const newWork = await response.json();
+                 // Remise à zero de la modale d'ajout de fichier
+                resetModal2();
+                //Retour modal1 pour vue gallery
+                returnModal1();
+                //Appel de la fonction d'ajout des nouveaux fichiers à la gallery modal
+                addNewWorkToModal(newWork);
+                //Appel de la fonction d'ajout des nouveaux fichiers à la gallery du site
+                aadNeworkToIndex(newWork);
+           };
+        };
+      };
+  });
+}
+
+//Fonction permettant de vider la modale N°2 pour l'ajout de photo à la fermeture de la modale ou au retour de la modale gallery
+function resetModal2() {
+  const imagePreview = document.querySelector('.imagePreview')
+  const iconAddPic = document.querySelector('.fa-image')
+  const labelInputFile = document.querySelector('.labelFileInput')
+  const textInputFile = document.querySelector('.addPicContainer p')
+  const titleForm = document.getElementById('title');
+  const categoryForm = document.getElementById('category');
+
+  imagePreview.style.display = 'none'
+  titleForm.value = ""
+  categoryForm.value = ""
+
+  iconAddPic.style.display = 'flex';
+  labelInputFile.style.display = 'flex';
+  textInputFile.style.display = 'flex';
+
+  const validateBtn = document.querySelector('.btnValidatePic');
+  validateBtn.disabled = true 
+  validateBtn.style.background = "#A7A7A7";
+  validateBtn.style.cursor = "default"
+  
+}
+
+
+//Fonction d'ajout du nouveau fichier a la gallery modale
+async function addNewWorkToModal (newWork) {
+      const newWorkId = newWork.id
+      const modalGallery = document.querySelector('.modalGallery')
+      //Création balise <figure>
+      const figure = document.createElement ('figure')
+      figure.classList.add (`figure-${newWork.id}`);
+      //Création balise <img>
+      const imageNewWork = document.createElement('img');
+      imageNewWork.src = newWork.imageUrl;
+      imageNewWork.alt = newWork.title;
+      //Création balise <i>
+      const trashIcon = document.createElement("div");
+      trashIcon.classList.add("trash-icon");
+      trashIcon.innerHTML= `<i class="fa-solid fa-trash-can" id="${newWork.id}"></i>`;
+      // Affichage des "work" séléctionné en les rattachant à la balise <div> du HTML
+      modalGallery.appendChild(figure);
+      figure.appendChild(imageNewWork);
+      figure.appendChild(trashIcon);
+
+      trashIcon.addEventListener('click', async (event) => {
+        deleteWorks(event, newWorkId)
+  });
+}
+
+async function aadNeworkToIndex(newWork) {
+      const gallery = document.querySelector('.gallery')
+      //Création balise <figure>
+      const figure = document.createElement ('figure')
+      figure.classList.add (`figure-${newWork.id}`);
+      //Création balise <img> et <figcaption>
+      const imageNewWork = document.createElement('img');
+      imageNewWork.src = newWork.imageUrl;
+      imageNewWork.alt = newWork.title;
+      const figCaption = document.createElement('figcaption');
+      figCaption.innerText = newWork.title;
+      // Affichage des "work" séléctionné en les rattachant à la balise <div> du HTML
+      gallery.appendChild(figure);
+      figure.appendChild(imageNewWork);
+      figure.appendChild(figCaption);
+}
+
+            
+
+
+      
+    
 
                 
