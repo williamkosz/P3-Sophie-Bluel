@@ -1,3 +1,8 @@
+// Informations de connexion : 
+//Mail : sophie.bluel@test.tld
+//MDP : S0phie
+
+
 const form = document.querySelector('.formLogin');
 const errorMessage = document.querySelector('.errorMessage');
 

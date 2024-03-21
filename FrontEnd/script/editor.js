@@ -134,15 +134,9 @@ export const returnModal1 = function () {
 //Fonction suppression travaux
 async function deleteWorks(event, worksId) {
    let monToken = window.localStorage.getItem('token');
-    const deleteConfirmation = await Swal.fire({
-      title: "Êtes-vous sûr(e) de vouloir supprimer cette image ?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Oui",
-      cancelButtonText: "Non",
-    });
+    const deleteConfirmation = confirm("Souhaitez-vous vraiment supprimer ce projet ?")
     // Si confirmation :
-    if (deleteConfirmation.isConfirmed) {
+    if (deleteConfirmation) {
       try {
         const deleteFetch = await fetch(`http://localhost:5678/api/works/${worksId}`,
           {
@@ -163,11 +157,7 @@ async function deleteWorks(event, worksId) {
           );
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Suppression impossible",
-          text: "Une erreur s'est produite",
-        });
+        alert('Suppression impossible, une erreur est survenue')
       }
   }
 }
@@ -203,23 +193,13 @@ export function choosePhoto () {
 
         //Message d'erreur si le taille de la photo ne correspond pas 
       } else if (file.size > maxSize){
-        Swal.fire({
-          icon: "warning",
-          title: "Une erreur est survenue",
-          text: "L'image est trop volumineuse !",
-          confirmButtonText: "Ok",
-        })
-
+        alert("L'image est trop volumineuse")
         //Message d'erreur si le format de la photo ne correspond pas
       } else {
-        Swal.fire({
-          icon: "warning",
-          title: "Une erreur est survenue",
-          text: "Le format doit être de type JPG ou PNG !",
-          confirmButtonText: "Ok",
-        })
-      }
-  });
+        alert("Le format du projet ne correspond pas !")
+        console("Le format du projet ne correspond pas !")
+      };
+    });
 }
 
 
@@ -235,21 +215,11 @@ export function postNewFile () {
         btnValidatePic.addEventListener('click', async (event) => {
           event.preventDefault();
           if (fileInput.value === "" || titleInput.value.trim() === "" || categoryInput.value === "") {
-            Swal.fire({
-              icon: "warning",
-              title: "Erreur",
-              text: "Il s'emblerait qu'il manque des informations",
-            });
+            alert("Il semblerait que certaines informations soient manquantes")
           } else { 
-            const postConfirmation = await Swal.fire ({
-            icon: "info",
-            title: "Souhaitez-vous ajouter ce nouveau projet ?",
-            showCancelButton: true,
-            confirmButtonText: "Oui",
-            cancelButtonText: "Non",
-          });
+            const postConfirmation = confirm("Voulez-vous importer votre projet ?")
           //Si le bouton "oui" est cliqué :
-          if(postConfirmation.isConfirmed) {
+          if(postConfirmation) {
             const formData = new FormData ();
               //Récupération de l'ID catégory
               const categoryId = categoryInput.options[categoryInput.selectedIndex].id;
@@ -263,12 +233,8 @@ export function postNewFile () {
                 Authorization: `Bearer ${monToken}`,
                 },
               body: formData,
-              }); 
+            });
               if (response.ok) {
-                Swal.fire ({
-                  icon: "success",
-                  title: "Nouveau projet ajouté !",
-                });
                 console.log(titleInput.value, " ajouté !")
                 const newWork = await response.json();
                  // Remise à zero de la modale d'ajout de fichier
@@ -278,12 +244,12 @@ export function postNewFile () {
                 //Appel de la fonction d'ajout des nouveaux fichiers à la gallery modal
                 addNewWorkToModal(newWork);
                 //Appel de la fonction d'ajout des nouveaux fichiers à la gallery du site
-                aadNeworkToIndex(newWork);
-           };
-        };
-      };
-  });
-}
+                addNeworkToIndex(newWork);
+              };
+            };
+          };
+        });
+      }
 
 //Fonction permettant de vider la modale N°2 pour l'ajout de photo à la fermeture de la modale ou au retour de la modale gallery
 function resetModal2() {
@@ -335,7 +301,7 @@ async function addNewWorkToModal (newWork) {
   });
 }
 
-async function aadNeworkToIndex(newWork) {
+async function addNeworkToIndex(newWork) {
       const gallery = document.querySelector('.gallery')
       //Création balise <figure>
       const figure = document.createElement ('figure')
