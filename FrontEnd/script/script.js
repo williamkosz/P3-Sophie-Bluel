@@ -16,35 +16,22 @@ export async function fetchData() {
     return await response.json();
 }
 
+
+
+//Récupération des catégories pour création des boutons dynamique
+async function fetchCategory () {
+    const response = await fetch ('http://localhost:5678/api/categories');
+    return await response.json();
+}
+
+
+
 // Création fonction pour reset de la section gallery
 const gallery = document.querySelector('.gallery');
 function resetGallery (){
     gallery.innerHTML = ""
 }
 
-//Etape 1.2 gestion du filtre des "works"
-//Récupération des boutons de filtrage
-const allButton = document.querySelector('.noFilter');
-const objectButton = document.querySelector('.filter-objet');
-const appartementButton = document.querySelector('.filter-appartement')
-const hotelsButton = document.querySelector('.filter-hotel');
-
-//Définition des évènements liés aux boutons
-allButton.addEventListener('click' , () => {
-    updateFilters("all");
-})
-
-objectButton.addEventListener('click' , () => {
-    updateFilters(1);
-})
-
-appartementButton.addEventListener('click' , () => {
-    updateFilters(2);
-})
-
-hotelsButton.addEventListener('click' , () => {
-    updateFilters(3);
-})
 
 
 // Création fonction pour filtrage des projets en fonction des catégories
@@ -53,7 +40,6 @@ function updateFilters(category) {
     .then(data => {
         // Vidage de l'affichage des projets
         resetGallery();
-
         //Découpage du tableau "data" en "work" individuels
         //Affichage de l'ensemble des "work" si bouton all, sinon affichage de la categoryID qui correspond au bouton
         data.forEach(work => {
@@ -79,12 +65,68 @@ function updateFilters(category) {
     });
 }
 
+
+
 // Appel initial pour afficher tous les travaux
 updateFilters('all');
 
 
+
+//Etape 1.2 gestion du filtre des "works"
+function createFilterMenu (){
+    const filterContainer = document.querySelector('.filter-container');
+    // Création du bouton "Tous" en dehors de la boucle
+    const filterButtonAll = document.createElement('button');
+    filterButtonAll.classList.add("filter-button");
+    filterButtonAll.textContent = "Tous";
+    filterButtonAll.value = "all";
+    filterContainer.appendChild(filterButtonAll);
+
+    fetchCategory()
+        .then(categories => {
+            categories.forEach(category => {
+                //Création boutons pour chaque catégorie
+                const filterButton = document.createElement('button');
+                //Ajout du style CSS
+                filterButton.classList.add("filter-button");
+                //Ajout du nom du bouton
+                filterButton.textContent = category.name;
+                //Ajout de son id correspondant à la catégorie
+                filterButton.value = category.id;
+                //Ajout des filtres à la div menu
+                filterContainer.appendChild(filterButton); 
+                //Appel fonction pour filtrage au click
+                filterButton.addEventListener('click', function (){
+                    const categoryId = category.id;
+                    if (categoryId === 'all') {
+                        // Si l'ID est "all", afficher toutes les catégories
+                        updateFilters('all');
+                        // Ajouter ici le code pour afficher toutes les catégories
+                    } else {
+                        // Sinon, appeler la fonction updateFilters avec l'ID de la catégorie
+                        updateFilters(categoryId);
+                    }
+                });
+            });
+        });
+    // Ajout du gestionnaire d'événements pour le bouton "Tous" en dehors de la boucle
+    filterButtonAll.addEventListener('click', function() {
+        // Lorsque le bouton "Tous" est cliqué,  appel de la fonction updateFilters avec 'all'
+        updateFilters('all');
+    });
+}
+
+
+
+//Création du menu filtre 
+createFilterMenu();
+
+
+
 // Appel fonction importée pour mode editeur
 editorMode()
+
+
 
 const btnOpen = document.querySelector('.btnOpen')
 const btnClose = document.querySelector('.btnClose')

@@ -196,7 +196,7 @@ footer nav ul {
 	justify-content: center;
 }
 
-.filter-container button {
+.filter-button {
 	font-family: syne;
 	padding: 9px 15px;
 	margin: 21px 10px 51px 0px;
@@ -210,7 +210,7 @@ footer nav ul {
 	
 }
 
-.filter-container button:hover {
+.filter-button:hover {
 	color: white;
 	background-color: #1D6154;
 }
