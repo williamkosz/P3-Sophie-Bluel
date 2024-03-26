@@ -35,7 +35,7 @@ function resetGallery (){
 
 
 // Création fonction pour filtrage des projets en fonction des catégories
-function updateFilters(category) {
+function updateGallery(category) {
     fetchData()
     .then(data => {
         // Vidage de l'affichage des projets
@@ -68,7 +68,7 @@ function updateFilters(category) {
 
 
 // Appel initial pour afficher tous les travaux
-updateFilters('all');
+updateGallery('all');
 
 
 
@@ -100,11 +100,11 @@ function createFilterMenu (){
                     const categoryId = category.id;
                     if (categoryId === 'all') {
                         // Si l'ID est "all", afficher toutes les catégories
-                        updateFilters('all');
+                        updateGallery('all');
                         // Ajouter ici le code pour afficher toutes les catégories
                     } else {
                         // Sinon, appeler la fonction updateFilters avec l'ID de la catégorie
-                        updateFilters(categoryId);
+                        updateGallery(categoryId);
                     }
                 });
             });
@@ -112,7 +112,7 @@ function createFilterMenu (){
     // Ajout du gestionnaire d'événements pour le bouton "Tous" en dehors de la boucle
     filterButtonAll.addEventListener('click', function() {
         // Lorsque le bouton "Tous" est cliqué,  appel de la fonction updateFilters avec 'all'
-        updateFilters('all');
+        updateGallery('all');
     });
 }
 

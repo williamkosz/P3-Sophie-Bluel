@@ -150,6 +150,7 @@ async function deleteWorks(event, worksId) {
           document.querySelectorAll(`.figure-${worksId}`)
           .forEach((figure) => figure.remove());
           event.preventDefault();
+          alert("Projet supprimé !")
           console.log("Travail supprimé");
         } else {
           console.error(
@@ -235,6 +236,7 @@ export function postNewFile () {
               body: formData,
             });
               if (response.ok) {
+                alert("Projet ajouté !");
                 console.log(titleInput.value, " ajouté !")
                 const newWork = await response.json();
                  // Remise à zero de la modale d'ajout de fichier
