@@ -223,8 +223,7 @@ export function postNewFile () {
           if(postConfirmation) {
             const formData = new FormData ();
               //Récupération de l'ID catégory
-              const categoryId = categoryInput.options[categoryInput.selectedIndex].id;
-              formData.append('category', categoryId);
+              formData.append('category', categoryInput.value);
               formData.append('image', fileInput.files[0]);
               formData.append('title', titleInput.value);
             const response = await fetch("http://localhost:5678/api/works", {
