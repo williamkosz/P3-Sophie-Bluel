@@ -157,6 +157,29 @@ overlay.addEventListener('click', closeModal2);
 arrowReturn.addEventListener('click', returnModal1)
 
 
+// Ajout de la partie catégorie de la modale en JS
+async function createOptionCategory () {
+
+    const categories = await fetchCategory();
+    //Récupération des categories
+    const optionCategory = document.getElementById('category')
+    optionCategory.innerHTML ='';
+    //Création de la catégorie vide avant choix
+    const emptyOption = document.createElement ('option');
+    emptyOption.value = '';
+    emptyOption.textContent = '';
+    optionCategory.appendChild(emptyOption);
+    // Création de cahque categorie dans le formulaire de la modale d'ajout
+    categories.forEach (function(category){
+        const option = document.createElement ('option');
+        option.value = category.id;
+        option.textContent = category.name
+        optionCategory.appendChild(option);
+    })
+}
+
+createOptionCategory();
+
 //Création dela fonction pour fonctionnement du bouton de validation d'ajout de photo
 const disabledValidateBtn = function () {
     const photoForm = document.getElementById('fileInput');
